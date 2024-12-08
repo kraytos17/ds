@@ -10,6 +10,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 enable_language(CXX)
 
+add_executable(ds src/main.cpp src/vector/my_vec.hpp)
+
 include(CTest)
 enable_testing()
 

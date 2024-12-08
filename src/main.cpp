@@ -1,5 +1,7 @@
-#include <iostream>
+#include <print>
+#include "vector/my_vec.hpp"
 
 int main(int, char**){
-    std::cout << "Hello, from ds!\n";
+    std::println("Hello, from ds!");
+    MyVec<int> vec;
 }
