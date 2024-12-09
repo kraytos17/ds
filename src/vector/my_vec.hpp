@@ -103,32 +103,32 @@ public:
         m_size = 0;
     }
 
-    std::size_t size() const { return m_size; }
-    std::size_t capacity() const { return m_cap; }
-    T& operator[](std::size_t idx) { return m_data[idx]; }
-    const T& operator[](std::size_t idx) const { return m_data[idx]; }
+    [[nodiscard]] std::size_t size() const { return m_size; }
+    [[nodiscard]] std::size_t capacity() const { return m_cap; }
+    [[nodiscard]] T& operator[](std::size_t idx) { return m_data[idx]; }
+    [[nodiscard]] const T& operator[](std::size_t idx) const { return m_data[idx]; }
 
-    T& at(std::size_t idx) {
+    [[nodiscard]] T& at(std::size_t idx) {
         if (idx >= m_size) {
             throw std::out_of_range{"Index out of range"};
         }
         return m_data[idx];
     }
 
-    const T& at(std::size_t idx) const {
+    [[nodiscard]] const T& at(std::size_t idx) const {
         if (idx >= m_size) {
             throw std::out_of_range{"Index out of range"};
         }
         return m_data[idx];
     }
 
-    T& front() { return m_data[0]; }
-    const T& front() const { return m_data[0]; }
-    T& back() { return m_data[m_size - 1]; }
-    const T& back() const { return m_data[m_size - 1]; }
-    T* data() noexcept { return m_data; }
-    const T* data() const noexcept { return m_data; }
-    bool empty() const noexcept { return m_size == 0; }
+    [[nodiscard]] T& front() { return m_data[0]; }
+    [[nodiscard]] const T& front() const { return m_data[0]; }
+    [[nodiscard]] T& back() { return m_data[m_size - 1]; }
+    [[nodiscard]] const T& back() const { return m_data[m_size - 1]; }
+    [[nodiscard]] T* data() noexcept { return m_data; }
+    [[nodiscard]] const T* data() const noexcept { return m_data; }
+    [[nodiscard]] bool empty() const noexcept { return m_size == 0; }
 
     void pushBack(const T& element) {
         if (m_size == m_cap) {
@@ -234,7 +234,6 @@ public:
     }
 
     void insert(std::size_t pos, std::initializer_list<T> init) { insert(pos, init.begin(), init.end()); }
-
     void erase(std::size_t pos) {
         if (pos >= m_size)
             return;
@@ -281,18 +280,18 @@ public:
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    iterator begin() noexcept { return m_data; }
-    const_iterator begin() const noexcept { return m_data; }
-    iterator end() noexcept { return m_data + m_size; }
-    const_iterator end() const noexcept { return m_data + m_size; }
+    [[nodiscard]] iterator begin() noexcept { return m_data; }
+    [[nodiscard]] const_iterator begin() const noexcept { return m_data; }
+    [[nodiscard]] iterator end() noexcept { return m_data + m_size; }
+    [[nodiscard]] const_iterator end() const noexcept { return m_data + m_size; }
 
-    const_iterator cbegin() const noexcept { return m_data; }
-    const_iterator cend() const noexcept { return m_data + m_size; }
+    [[nodiscard]] const_iterator cbegin() const noexcept { return m_data; }
+    [[nodiscard]] const_iterator cend() const noexcept { return m_data + m_size; }
 
-    reverse_iterator rbegin() noexcept { return reverse_iterator(end()); }
-    reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
-    const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end()); }
-    const_reverse_iterator rend() const noexcept { return const_reverse_iterator(begin()); }
+    [[nodiscard]] reverse_iterator rbegin() noexcept { return reverse_iterator(end()); }
+    [[nodiscard]] reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
+    [[nodiscard]] const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end()); }
+    [[nodiscard]] const_reverse_iterator rend() const noexcept { return const_reverse_iterator(begin()); }
 
 private:
     T* m_data{};
@@ -315,7 +314,6 @@ private:
         if (m_data) {
             m_data->~T();
         }
-
         m_data = newData;
         m_cap = newCap;
     }
