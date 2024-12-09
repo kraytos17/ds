@@ -212,7 +212,7 @@ public:
 
     template<typename InputIt>
     void insert(std::size_t pos, InputIt first, InputIt last) {
-        auto count = std::distance(first, last);
+        auto count = std::ranges::distance(first, last);
         if (count <= 0 || pos > m_size) {
             return;
         }
@@ -274,20 +274,25 @@ public:
         m_size = count;
     }
 
-    template<typename InputIt>
-    void assign(InputIt first, InputIt last) {
-        clear();
-        auto count = std::distance(first, last);
-        if (count > m_cap) {
-            reserve(count);
-        }
-        for (auto it{first}; it != last; ++it) {
-            ::new (static_cast<void*>(m_data + m_size)) T{*it};
-            ++m_size;
-        }
-    }
-
     void assign(std::initializer_list<T> init) { assign(init.begin(), init.end()); }
+
+    using iterator = T*;
+    using const_iterator = const T*;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+    iterator begin() noexcept { return m_data; }
+    const_iterator begin() const noexcept { return m_data; }
+    iterator end() noexcept { return m_data + m_size; }
+    const_iterator end() const noexcept { return m_data + m_size; }
+
+    const_iterator cbegin() const noexcept { return m_data; }
+    const_iterator cend() const noexcept { return m_data + m_size; }
+
+    reverse_iterator rbegin() noexcept { return reverse_iterator(end()); }
+    reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
+    const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end()); }
+    const_reverse_iterator rend() const noexcept { return const_reverse_iterator(begin()); }
 
 private:
     T* m_data{};
@@ -308,7 +313,7 @@ private:
         }
 
         if (m_data) {
-            m_allocator.destroy(m_data, m_cap);
+            m_data->~T();
         }
 
         m_data = newData;
@@ -328,21 +333,4 @@ private:
         m_data = newData;
         m_cap = newCap;
     }
-
-    T* begin() noexcept { return m_data; }
-    const T* begin() const noexcept { return m_data; }
-    T* end() noexcept { return m_data + m_size; }
-    const T* end() const noexcept { return m_data + m_size; }
-
-    const T* cbegin() const noexcept { return m_data; }
-    const T* cend() const noexcept { return m_data + m_size; }
-
-    std::reverse_iterator<T*> rbegin() noexcept { return std::reverse_iterator<T*>(end()); }
-    std::reverse_iterator<T*> rend() noexcept { return std::reverse_iterator<T*>(begin()); }
-
-    std::reverse_iterator<const T*> rbegin() const noexcept { return std::reverse_iterator<const T*>(end()); }
-    std::reverse_iterator<const T*> rend() const noexcept { return std::reverse_iterator<const T*>(begin()); }
-
-    std::reverse_iterator<const T*> crbegin() const noexcept { return std::reverse_iterator<const T*>(cend()); }
-    std::reverse_iterator<const T*> crend() const noexcept { return std::reverse_iterator<const T*>(cbegin()); }
 };
