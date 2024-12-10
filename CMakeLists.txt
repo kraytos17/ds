@@ -21,7 +21,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(ds_tests tests/vec_test.cpp)
+add_executable(ds_tests tests/vec_test.cpp tests/string_test.cpp)
 target_link_libraries(ds_tests PRIVATE gtest gtest_main)
 
 include(GoogleTest)
