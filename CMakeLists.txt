@@ -37,6 +37,7 @@ add_executable(ds_tests
     ${TEST_DIR}/monostack_test.cpp
     ${TEST_DIR}/queue_test.cpp
     ${TEST_DIR}/deque_test.cpp
+    ${TEST_DIR}/cqueue_test.cpp
 )
 
 target_link_libraries(ds_tests PRIVATE
