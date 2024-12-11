@@ -33,6 +33,7 @@ add_executable(ds_tests
     ${TEST_DIR}/vec_test.cpp
     ${TEST_DIR}/string_test.cpp
     ${TEST_DIR}/stack_test.cpp
+    ${TEST_DIR}/monostack_test.cpp
 )
 
 target_link_libraries(ds_tests PRIVATE
