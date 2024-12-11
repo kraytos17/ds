@@ -24,6 +24,7 @@ target_include_directories(ds PRIVATE
     ${SRC_DIR}/vector
     ${SRC_DIR}/string
     ${SRC_DIR}/stack
+    ${SRC_DIR}/queue
 )
 
 include(CTest)
@@ -34,6 +35,8 @@ add_executable(ds_tests
     ${TEST_DIR}/string_test.cpp
     ${TEST_DIR}/stack_test.cpp
     ${TEST_DIR}/monostack_test.cpp
+    ${TEST_DIR}/queue_test.cpp
+    ${TEST_DIR}/deque_test.cpp
 )
 
 target_link_libraries(ds_tests PRIVATE
