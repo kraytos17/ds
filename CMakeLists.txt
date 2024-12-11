@@ -40,6 +40,7 @@ add_executable(ds_tests
     ${TEST_DIR}/deque_test.cpp
     ${TEST_DIR}/cqueue_test.cpp
     ${TEST_DIR}/sll_test.cpp
+    ${TEST_DIR}/dll_test.cpp
 )
 
 target_link_libraries(ds_tests PRIVATE
