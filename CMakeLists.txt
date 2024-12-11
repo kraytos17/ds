@@ -25,6 +25,7 @@ target_include_directories(ds PRIVATE
     ${SRC_DIR}/string
     ${SRC_DIR}/stack
     ${SRC_DIR}/queue
+    ${SRC_DIR}/linked_list
 )
 
 include(CTest)
@@ -38,6 +39,7 @@ add_executable(ds_tests
     ${TEST_DIR}/queue_test.cpp
     ${TEST_DIR}/deque_test.cpp
     ${TEST_DIR}/cqueue_test.cpp
+    ${TEST_DIR}/sll_test.cpp
 )
 
 target_link_libraries(ds_tests PRIVATE
@@ -49,6 +51,8 @@ target_include_directories(ds_tests PRIVATE
     ${SRC_DIR}/vector
     ${SRC_DIR}/string
     ${SRC_DIR}/stack
+    ${SRC_DIR}/queue
+    ${SRC_DIR}/linked_list
 )
 
 include(GoogleTest)
