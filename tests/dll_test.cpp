@@ -4,7 +4,7 @@
 
 class MyDllTest : public ::testing::Test {
 protected:
-    MyDll<int> list;
+    DLL<int> list;
 
     std::string capturePrintOutput() {
         std::ostringstream output;

@@ -10,9 +10,9 @@ template<typename T>
 concept Stackable = std::movable<T>;
 
 template<Stackable T>
-class MyStack {
+class Stack {
 public:
-    constexpr MyStack() = default;
+    constexpr Stack() = default;
 
     constexpr void push(const T& value) {
         m_storage.push_front(value);

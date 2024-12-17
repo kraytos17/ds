@@ -8,7 +8,7 @@
 #include <utility>
 
 template<typename T>
-class MyCll {
+class CLL {
 private:
     struct Node {
         T data;
@@ -78,19 +78,19 @@ public:
     const_iterator begin() const noexcept { return const_iterator(m_head, m_head); }
     const_iterator end() const noexcept { return const_iterator(); }
 
-    MyCll() = default;
+    CLL() = default;
 
-    MyCll(std::initializer_list<T> init) {
+    CLL(std::initializer_list<T> init) {
         for (const auto& val: init) {
             pushBack(val);
         }
     }
 
-    MyCll(const MyCll& other) { *this = other; }
+    CLL(const CLL& other) { *this = other; }
 
-    MyCll(MyCll&& other) noexcept = default;
+    CLL(CLL&& other) noexcept = default;
 
-    MyCll& operator=(const MyCll& other) {
+    CLL& operator=(const CLL& other) {
         if (this != &other) {
             clear();
             for (const auto& val: other) {
@@ -100,9 +100,9 @@ public:
         return *this;
     }
 
-    MyCll& operator=(MyCll&& other) noexcept = default;
+    CLL& operator=(CLL&& other) noexcept = default;
 
-    ~MyCll() { clear(); }
+    ~CLL() { clear(); }
 
     T& front() {
         if (empty()) {

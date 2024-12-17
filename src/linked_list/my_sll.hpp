@@ -11,7 +11,7 @@
 #include <stdexcept>
 
 template<typename T>
-class MySll {
+class SLL {
 public:
     struct Node {
         std::unique_ptr<Node> next;
@@ -24,19 +24,18 @@ public:
             next(std::move(nextNode)), data(value) {}
     };
 
-    constexpr MySll() = default;
+    constexpr SLL() = default;
 
-    MySll(const MySll& other)
-        requires std::copyable<T>
-    {
+    SLL(const SLL& other)
+    requires std::copyable<T> {
         for (const auto& item: other) {
             insertBack(item);
         }
     }
 
-    constexpr MySll(MySll&&) noexcept = default;
+    constexpr SLL(SLL&&) noexcept = default;
 
-    MySll& operator=(const MySll& other)
+    SLL& operator=(const SLL& other)
         requires std::copyable<T>
     {
         if (this != &other) {
@@ -48,7 +47,7 @@ public:
         return *this;
     }
 
-    constexpr MySll& operator=(MySll&&) noexcept = default;
+    constexpr SLL& operator=(SLL&&) noexcept = default;
 
     template<typename U = T>
         requires std::convertible_to<U, T>

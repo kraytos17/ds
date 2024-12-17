@@ -5,9 +5,9 @@
 #include <stdexcept>
 
 template<typename T, std::size_t N>
-class MyCircularQueue {
+class CircularQueue {
 public:
-    constexpr MyCircularQueue() = default;
+    constexpr CircularQueue() = default;
 
     constexpr void enqueue(const T& value) {
         if (full()) {

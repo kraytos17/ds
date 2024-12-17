@@ -4,7 +4,7 @@
 
 class MySllTest : public ::testing::Test {
 protected:
-    MySll<int> list;
+    SLL<int> list;
 };
 
 TEST_F(MySllTest, InsertFront) {

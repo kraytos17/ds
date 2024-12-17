@@ -3,8 +3,8 @@
 
 class MyVecTest : public testing::Test {
 protected:
-    MyVec<int> defaultVec;
-    MyVec<int> sizeValueVec = MyVec<int>(5, 42);
+    Vector<int> defaultVec;
+    Vector<int> sizeValueVec = Vector<int>(5, 42);
 };
 
 TEST_F(MyVecTest, DefaultConstructor) {
@@ -22,7 +22,7 @@ TEST_F(MyVecTest, ConstructorWithSizeAndValue) {
 }
 
 TEST_F(MyVecTest, CopyConstructor) {
-    MyVec<int> copy = sizeValueVec;
+    Vector<int> copy = sizeValueVec;
 
     EXPECT_EQ(copy.size(), sizeValueVec.size());
     EXPECT_EQ(copy.capacity(), sizeValueVec.capacity());
@@ -32,7 +32,7 @@ TEST_F(MyVecTest, CopyConstructor) {
 }
 
 TEST_F(MyVecTest, MoveConstructor) {
-    MyVec<int> moved = std::move(sizeValueVec);
+    Vector<int> moved = std::move(sizeValueVec);
 
     EXPECT_EQ(moved.size(), 5);
     EXPECT_EQ(moved.capacity(), 5);
@@ -44,7 +44,7 @@ TEST_F(MyVecTest, MoveConstructor) {
 }
 
 TEST_F(MyVecTest, AssignmentOperator) {
-    MyVec<int> assigned;
+    Vector<int> assigned;
     assigned = sizeValueVec;
 
     EXPECT_EQ(assigned.size(), sizeValueVec.size());
@@ -64,7 +64,7 @@ TEST_F(MyVecTest, PushBack) {
 }
 
 TEST_F(MyVecTest, PopBack) {
-    MyVec<int> vec(3, 5);
+    Vector<int> vec(3, 5);
 
     vec.popBack();
     EXPECT_EQ(vec.size(), 2);
@@ -77,7 +77,7 @@ TEST_F(MyVecTest, PopBack) {
 }
 
 TEST_F(MyVecTest, InsertSingleElement) {
-    MyVec<int> vec(3, 1);
+    Vector<int> vec(3, 1);
     vec.insert(1, 42);
 
     EXPECT_EQ(vec.size(), 4);
@@ -87,7 +87,7 @@ TEST_F(MyVecTest, InsertSingleElement) {
 }
 
 TEST_F(MyVecTest, EraseSingleElement) {
-    MyVec<int> vec{1, 2, 3, 4};
+    Vector<int> vec{1, 2, 3, 4};
 
     vec.erase(1);
 
@@ -98,7 +98,7 @@ TEST_F(MyVecTest, EraseSingleElement) {
 }
 
 TEST_F(MyVecTest, ResizeLarger) {
-    MyVec<int> vec(3, 1);
+    Vector<int> vec(3, 1);
 
     vec.resize(5, 42);
 
@@ -108,7 +108,7 @@ TEST_F(MyVecTest, ResizeLarger) {
 }
 
 TEST_F(MyVecTest, ResizeSmaller) {
-    MyVec<int> vec(5, 1);
+    Vector<int> vec(5, 1);
 
     vec.resize(2);
 
@@ -116,7 +116,7 @@ TEST_F(MyVecTest, ResizeSmaller) {
 }
 
 TEST_F(MyVecTest, ShrinkToFit) {
-    MyVec<int> vec(5, 7);
+    Vector<int> vec(5, 7);
     vec.reserve(20);
 
     EXPECT_GE(vec.capacity(), 20);
@@ -131,7 +131,7 @@ TEST_F(MyVecTest, ShrinkToFit) {
 }
 
 TEST_F(MyVecTest, Assign) {
-    MyVec<int> vec;
+    Vector<int> vec;
     vec.assign(4, 3);
 
     EXPECT_EQ(vec.size(), 4);
@@ -141,7 +141,7 @@ TEST_F(MyVecTest, Assign) {
 }
 
 TEST_F(MyVecTest, Iterators) {
-    MyVec<int> vec{1, 2, 3, 4};
+    Vector<int> vec{1, 2, 3, 4};
 
     std::vector<int> copy(vec.begin(), vec.end());
 
@@ -153,7 +153,7 @@ TEST_F(MyVecTest, Iterators) {
 }
 
 TEST_F(MyVecTest, ReverseIterators) {
-    MyVec<int> vec{1, 2, 3, 4};
+    Vector<int> vec{1, 2, 3, 4};
 
     auto it = vec.rbegin();
     EXPECT_EQ(*it, 4);

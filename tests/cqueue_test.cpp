@@ -3,7 +3,7 @@
 
 class MyCircularQueueTest : public ::testing::Test {
 protected:
-    MyCircularQueue<int, 3> queue;
+    CircularQueue<int, 3> queue;
 };
 
 TEST_F(MyCircularQueueTest, EnqueueAndCheckFrontBack) {
@@ -38,9 +38,7 @@ TEST_F(MyCircularQueueTest, DequeueAndCheckFront) {
     EXPECT_EQ(queue.front(), 30);
 }
 
-TEST_F(MyCircularQueueTest, DequeueEmptyThrows) {
-    EXPECT_THROW(queue.dequeue(), std::underflow_error);
-}
+TEST_F(MyCircularQueueTest, DequeueEmptyThrows) { EXPECT_THROW(queue.dequeue(), std::underflow_error); }
 
 TEST_F(MyCircularQueueTest, FullAndEmptyConditions) {
     EXPECT_TRUE(queue.empty());

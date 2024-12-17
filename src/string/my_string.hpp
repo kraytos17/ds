@@ -6,13 +6,13 @@
 #include <ostream>
 #include <string_view>
 
-class MyString {
+class String {
 public:
     static constexpr std::size_t SSO_LEN{31};
 
-    constexpr MyString() noexcept : m_length{0} { m_sso[0] = '\0'; }
+    constexpr String() noexcept : m_length{0} { m_sso[0] = '\0'; }
 
-    MyString(const char* str) : m_length{std::strlen(str)} {
+    String(const char* str) : m_length{std::strlen(str)} {
         if (m_length <= SSO_LEN) {
             std::memcpy(m_sso, str, m_length + 1);
         } else {
@@ -21,7 +21,7 @@ public:
         }
     }
 
-    MyString(std::string_view view) : m_length{view.size()} {
+    String(std::string_view view) : m_length{view.size()} {
         if (m_length <= SSO_LEN) {
             std::memcpy(m_sso, view.data(), m_length);
             m_sso[m_length] = '\0';
@@ -32,7 +32,7 @@ public:
         }
     }
 
-    MyString(const MyString& other) : m_length{other.m_length} {
+    String(const String& other) : m_length{other.m_length} {
         if (other.is_sso()) {
             std::memcpy(m_sso, other.m_sso, SSO_LEN + 1);
         } else {
@@ -41,7 +41,7 @@ public:
         }
     }
 
-    MyString(MyString&& other) noexcept : m_length{other.m_length} {
+    String(String&& other) noexcept : m_length{other.m_length} {
         if (other.is_sso()) {
             std::memcpy(m_sso, other.m_sso, SSO_LEN + 1);
         } else {
@@ -52,7 +52,7 @@ public:
     }
 
 
-    MyString& operator=(const MyString& other) {
+    String& operator=(const String& other) {
         if (this != &other) {
             clear();
             m_length = other.m_length;
@@ -67,7 +67,7 @@ public:
         return *this;
     }
 
-    MyString& operator=(MyString&& other) noexcept {
+    String& operator=(String&& other) noexcept {
         if (this != &other) {
             clear();
 
@@ -85,11 +85,11 @@ public:
     }
 
 
-    ~MyString() { clear(); }
+    ~String() { clear(); }
 
-    MyString operator+(const MyString& other) const {
+    String operator+(const String& other) const {
         std::size_t new_length = m_length + other.m_length;
-        MyString result;
+        String result;
         if (new_length <= SSO_LEN) {
             std::memcpy(result.m_sso, data(), m_length);
             std::memcpy(result.m_sso + m_length, other.data(), other.m_length);
@@ -104,12 +104,12 @@ public:
         return result;
     }
 
-    constexpr auto operator<=>(const MyString& other) const noexcept {
+    constexpr auto operator<=>(const String& other) const noexcept {
         return std::lexicographical_compare_three_way(data(), data() + m_length, other.data(),
                                                       other.data() + other.m_length);
     }
 
-    constexpr bool operator==(const MyString& other) const noexcept {
+    constexpr bool operator==(const String& other) const noexcept {
         return m_length == other.m_length && std::memcmp(data(), other.data(), m_length) == 0;
     }
 
@@ -117,7 +117,7 @@ public:
     [[nodiscard]] const char* c_str() const noexcept { return is_sso() ? m_sso : m_data; }
     [[nodiscard]] const char* data() const noexcept { return c_str(); }
 
-    friend std::ostream& operator<<(std::ostream& os, const MyString& str) {
+    friend std::ostream& operator<<(std::ostream& os, const String& str) {
         os << str.c_str();
         return os;
     }

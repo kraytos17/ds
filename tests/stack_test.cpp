@@ -4,14 +4,14 @@
 class StackTest : public testing::Test {
 protected:
     void SetUp() override {
-        m_stackEmpty = MyStack<int>();
-        m_stackOne = MyStack<int>();
-        m_stackTwo = MyStack<int>();
+        m_stackEmpty = Stack<int>();
+        m_stackOne = Stack<int>();
+        m_stackTwo = Stack<int>();
     }
 
-    MyStack<int> m_stackEmpty;
-    MyStack<int> m_stackOne;
-    MyStack<int> m_stackTwo;
+    Stack<int> m_stackEmpty;
+    Stack<int> m_stackOne;
+    Stack<int> m_stackTwo;
 };
 
 TEST_F(StackTest, DefaultConstructor) {
@@ -51,9 +51,7 @@ TEST_F(StackTest, Top) {
     EXPECT_EQ(const_stack.top(), 100);
 }
 
-TEST_F(StackTest, EmptyStackTopException) {
-    EXPECT_THROW(m_stackEmpty.top(), std::out_of_range);
-}
+TEST_F(StackTest, EmptyStackTopException) { EXPECT_THROW(m_stackEmpty.top(), std::out_of_range); }
 
 TEST_F(StackTest, SizeAndEmpty) {
     EXPECT_TRUE(m_stackEmpty.empty());
@@ -75,7 +73,7 @@ TEST_F(StackTest, SizeAndEmpty) {
 }
 
 TEST_F(StackTest, SizeAfterPushAndPop) {
-    MyStack<int> stack;
+    Stack<int> stack;
 
     EXPECT_EQ(stack.size(), 0);
 
@@ -122,7 +120,7 @@ TEST_F(StackTest, ElementsIteration) {
 }
 
 TEST_F(StackTest, StringStack) {
-    MyStack<std::string> string_stack;
+    Stack<std::string> string_stack;
 
     string_stack.push("Hello");
     string_stack.push("World");

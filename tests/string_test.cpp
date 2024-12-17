@@ -5,12 +5,12 @@
 
 class MyStringTest : public testing::Test {
 protected:
-    MyString defaultStr;
-    MyString emptyStr;
-    MyString singleCharStr{"A"};
-    MyString smallStr{"Hello"};
-    MyString ssoStr{"1234567890123456789012345678901"};
-    MyString largeStr{
+    String defaultStr;
+    String emptyStr;
+    String singleCharStr{"A"};
+    String smallStr{"Hello"};
+    String ssoStr{"1234567890123456789012345678901"};
+    String largeStr{
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"};
 };
 
@@ -20,7 +20,7 @@ TEST_F(MyStringTest, DefaultConstructor) {
 }
 
 TEST_F(MyStringTest, ConstructorWithEmptyString) {
-    MyString str("");
+    String str("");
     EXPECT_EQ(str.size(), 0);
     EXPECT_EQ(std::string_view(str.data(), str.size()), "");
 }
@@ -46,53 +46,53 @@ TEST_F(MyStringTest, ConstructorWithLargeString) {
 }
 
 TEST_F(MyStringTest, CopyConstructor) {
-    MyString copy = smallStr;
+    String copy = smallStr;
     EXPECT_EQ(copy.size(), smallStr.size());
     EXPECT_EQ(std::string_view(copy.data(), copy.size()), "Hello");
 }
 
 TEST_F(MyStringTest, MoveConstructor) {
-    MyString moved = std::move(smallStr);
+    String moved = std::move(smallStr);
     EXPECT_EQ(moved.size(), 5);
     EXPECT_EQ(std::string_view(moved.data(), moved.size()), "Hello");
 }
 
 TEST_F(MyStringTest, CopyAssignment) {
-    MyString copy;
+    String copy;
     copy = smallStr;
     EXPECT_EQ(copy.size(), smallStr.size());
     EXPECT_EQ(std::string_view(copy.data(), copy.size()), "Hello");
 }
 
 TEST_F(MyStringTest, MoveAssignment) {
-    MyString moved;
+    String moved;
     moved = std::move(smallStr);
     EXPECT_EQ(moved.size(), 5);
     EXPECT_EQ(std::string_view(moved.data(), moved.size()), "Hello");
 }
 
 TEST_F(MyStringTest, Concatenation) {
-    MyString str1("Hello, ");
-    MyString str2("World!");
-    MyString result = str1 + str2;
+    String str1("Hello, ");
+    String str2("World!");
+    String result = str1 + str2;
 
     EXPECT_EQ(result.size(), 13);
     EXPECT_EQ(std::string_view(result.data(), result.size()), "Hello, World!");
 }
 
 TEST_F(MyStringTest, ConcatenationWithEmptyString) {
-    MyString str1("Hello");
-    MyString str2("");
-    MyString result = str1 + str2;
+    String str1("Hello");
+    String str2("");
+    String result = str1 + str2;
 
     EXPECT_EQ(result.size(), 5);
     EXPECT_EQ(std::string_view(result.data(), result.size()), "Hello");
 }
 
 TEST_F(MyStringTest, ConcatenationEmptyStrings) {
-    MyString str1("");
-    MyString str2("");
-    MyString result = str1 + str2;
+    String str1("");
+    String str2("");
+    String result = str1 + str2;
 
     EXPECT_EQ(result.size(), 0);
     EXPECT_EQ(std::string_view(result.data(), result.size()), "");
@@ -105,9 +105,9 @@ TEST_F(MyStringTest, OstreamOperator) {
 }
 
 TEST_F(MyStringTest, ComparisonOperator) {
-    MyString str1("Apple");
-    MyString str2("Banana");
-    MyString str3("Apple");
+    String str1("Apple");
+    String str2("Banana");
+    String str3("Apple");
 
     EXPECT_LT(str1, str2);
     EXPECT_EQ(str1, str3);
@@ -115,24 +115,24 @@ TEST_F(MyStringTest, ComparisonOperator) {
 }
 
 TEST_F(MyStringTest, ComparisonWithEmptyString) {
-    MyString str1("Apple");
-    MyString str2("");
+    String str1("Apple");
+    String str2("");
     EXPECT_GT(str1, str2);
     EXPECT_NE(str1, str2);
     EXPECT_LT(str2, str1);
 }
 
 TEST_F(MyStringTest, MoveSemantics) {
-    MyString original("Move this!");
-    MyString moved = std::move(original);
+    String original("Move this!");
+    String moved = std::move(original);
 
     EXPECT_EQ(std::string_view(moved.data(), moved.size()), "Move this!");
     EXPECT_EQ(original.size(), 0);
 }
 
 TEST_F(MyStringTest, CopySemantics) {
-    MyString original("Copy this!");
-    MyString copy = original;
+    String original("Copy this!");
+    String copy = original;
 
     EXPECT_EQ(copy.size(), 10);
     EXPECT_EQ(std::string_view(copy.data(), copy.size()), "Copy this!");
@@ -141,7 +141,7 @@ TEST_F(MyStringTest, CopySemantics) {
 
 TEST_F(MyStringTest, LongString) {
     std::string longStr(1000, 'A');
-    MyString str(longStr);
+    String str(longStr);
 
     EXPECT_EQ(str.size(), 1000);
     EXPECT_EQ(std::string_view(str.data(), str.size()), longStr);
@@ -149,14 +149,14 @@ TEST_F(MyStringTest, LongString) {
 
 TEST_F(MyStringTest, ExactSSOEdgeCase) {
     const char* exactSSO = "1234567890123456789012345678901";
-    MyString str(exactSSO);
+    String str(exactSSO);
     EXPECT_EQ(str.size(), 31);
     EXPECT_EQ(std::string_view(str.data(), str.size()), exactSSO);
 }
 
 TEST_F(MyStringTest, LargeStringBeyondSSO) {
     const char* beyondSSO = "1234567890123456789012345678901234567890";
-    MyString str(beyondSSO);
+    String str(beyondSSO);
     EXPECT_EQ(str.size(), 40);
     EXPECT_EQ(std::string_view(str.data(), str.size()), beyondSSO);
 }

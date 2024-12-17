@@ -5,9 +5,9 @@
 #include <stdexcept>
 
 template<typename T>
-class MyQueue {
+class Queue {
 public:
-    constexpr MyQueue() = default;
+    constexpr Queue() = default;
 
     constexpr void enqueue(const T& value) { m_storage.push_back(value); }
 

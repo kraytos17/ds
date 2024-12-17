@@ -5,17 +5,13 @@
 #include <vector>
 
 template<typename T>
-class MyDeque {
+class Deque {
 public:
-    constexpr MyDeque() = default;
+    constexpr Deque() = default;
 
-    constexpr void pushFront(const T& value) {
-        m_storage.insert(m_storage.begin(), value);
-    }
+    constexpr void pushFront(const T& value) { m_storage.insert(m_storage.begin(), value); }
 
-    constexpr void pushBack(const T& value) {
-        m_storage.push_back(value);
-    }
+    constexpr void pushBack(const T& value) { m_storage.push_back(value); }
 
     constexpr void popFront() {
         if (empty()) {

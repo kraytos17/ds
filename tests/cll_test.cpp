@@ -4,7 +4,7 @@
 
 class MyCllTest : public ::testing::Test {
 protected:
-    MyCll<int> list;
+    CLL<int> list;
 
     void SetUp() override {
         list.pushBack(1);
@@ -98,7 +98,7 @@ TEST_F(MyCllTest, Print_PrintsListContents) {
 }
 
 TEST(MyCllEdgeCaseTest, EmptyList_ThrowsOnAccess) {
-    MyCll<int> emptyList;
+    CLL<int> emptyList;
 
     EXPECT_TRUE(emptyList.empty());
     EXPECT_EQ(emptyList.size(), 0);

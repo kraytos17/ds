@@ -3,7 +3,7 @@
 
 class MyDequeTest : public ::testing::Test {
 protected:
-    MyDeque<int> m_deque;
+    Deque<int> m_deque;
 };
 
 TEST_F(MyDequeTest, EmptyDeque) {

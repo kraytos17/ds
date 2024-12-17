@@ -7,11 +7,11 @@
 #include <type_traits>
 
 template<typename T, typename Alloc = std::allocator<T>>
-class MyVec {
+class Vector {
 public:
-    MyVec() : m_data{nullptr}, m_size{0}, m_cap{0} {}
+    Vector() : m_data{nullptr}, m_size{0}, m_cap{0} {}
 
-    MyVec(std::size_t count, const T& elem = T{}) {
+    Vector(std::size_t count, const T& elem = T{}) {
         m_data = m_allocator.allocate(count);
         for (std::size_t i{0}; i < count; ++i) {
             ::new (static_cast<void*>(m_data + i)) T{elem};
@@ -19,7 +19,7 @@ public:
         m_size = m_cap = count;
     }
 
-    MyVec(const MyVec& other) : m_data{nullptr}, m_size{other.m_size}, m_cap{other.m_cap} {
+    Vector(const Vector& other) : m_data{nullptr}, m_size{other.m_size}, m_cap{other.m_cap} {
         if (m_cap > 0) {
             m_data = m_allocator.allocate(m_cap);
             for (std::size_t i{0}; i < m_size; ++i) {
@@ -28,7 +28,7 @@ public:
         }
     }
 
-    MyVec& operator=(const MyVec& other) {
+    Vector& operator=(const Vector& other) {
         if (this == &other) {
             return *this;
         }
@@ -50,13 +50,13 @@ public:
         return *this;
     }
 
-    MyVec(MyVec&& other) noexcept : m_data{other.m_data}, m_size{other.m_size}, m_cap{other.m_cap} {
+    Vector(Vector&& other) noexcept : m_data{other.m_data}, m_size{other.m_size}, m_cap{other.m_cap} {
         other.m_data = nullptr;
         other.m_size = 0;
         other.m_cap = 0;
     }
 
-    MyVec& operator=(MyVec&& other) noexcept {
+    Vector& operator=(Vector&& other) noexcept {
         if (this == &other) {
             return *this;
         }
@@ -76,7 +76,7 @@ public:
         return *this;
     }
 
-    MyVec(std::initializer_list<T> init) : m_data{nullptr}, m_size{init.size()}, m_cap{init.size()} {
+    Vector(std::initializer_list<T> init) : m_data{nullptr}, m_size{init.size()}, m_cap{init.size()} {
         if (m_cap > 0) {
             m_data = m_allocator.allocate(m_cap);
             std::size_t i{0};
@@ -87,14 +87,14 @@ public:
         }
     }
 
-    ~MyVec() {
+    ~Vector() {
         clear();
         if (m_data) {
             m_allocator.deallocate(m_data, m_cap);
         }
     }
 
-    auto operator<=>(const MyVec& other) const noexcept = default;
+    auto operator<=>(const Vector& other) const noexcept = default;
 
     void clear() {
         for (std::size_t i{0}; i < m_size; ++i) {

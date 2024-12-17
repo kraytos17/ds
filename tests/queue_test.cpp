@@ -3,7 +3,7 @@
 
 class QueueTest : public testing::Test {
 protected:
-    MyQueue<int> m_queue;
+    Queue<int> m_queue;
 };
 
 TEST_F(QueueTest, EnqueueIncreasesSize) {
