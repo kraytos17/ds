@@ -1,6 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <concepts>
+#include <cstddef>
+#include <stdexcept>
 #include <utility>
 
 template<typename T>
@@ -27,7 +30,7 @@ public:
             return;
         }
 
-        Node* curr = m_root;
+        Node* curr{m_root};
         Node* par = nullptr;
 
         while (curr) {
@@ -57,7 +60,7 @@ public:
             return root;
         }
 
-        Node* curr = m_root;
+        Node* curr{m_root};
         Node* par = nullptr;
 
         while (curr && curr->data != value) {
@@ -96,6 +99,83 @@ public:
         }
 
         return root;
+    }
+
+    bool search(const T& value) const {
+        Node* curr{m_root};
+        while (curr) {
+            if (value == m_root->data) {
+                return true;
+            } else if (value < m_root->data) {
+                curr = curr->left;
+            } else {
+                curr = curr->right;
+            }
+        }
+
+        return false;
+    }
+
+    const T min() const {
+        if (!m_root) {
+            throw std::runtime_error("The tree is empty, no min value.");
+        }
+
+        Node* curr{m_root};
+        while (curr->left) {
+            curr = curr->left;
+        }
+        return curr->data;
+    }
+
+    const T max() const {
+        if (!m_root) {
+            throw std::runtime_error("The tree is empty, no max value.");
+        }
+
+        Node* curr{m_root};
+        while (curr->right) {
+            curr = curr->right;
+        }
+        return curr->data;
+    }
+
+    std::size_t height() const {
+        Node* curr{m_root};
+        if (!curr) {
+            return 0;
+        }
+        return 1 + std::max(height(curr->left), height(curr->right));
+    }
+
+    bool isBalanced() const {
+        Node* curr{m_root};
+        if (!curr) {
+            return true;
+        }
+
+        int lh = height(curr->left);
+        int rh = height(curr->right);
+        return lh - rh <= 1 && isBalanced(curr->left) && isBalanced(curr->right);
+    }
+
+    const T successor(const T& value) const {
+        Node* curr{m_root};
+        Node* succ{nullptr};
+
+        while (curr) {
+            if (value < curr->data) {
+                succ = curr;
+                curr = curr->left;
+            } else {
+                curr = curr->right;
+            }
+        }
+
+        if (!succ) {
+            throw std::runtime_error("No successor found.");
+        }
+        return succ->data;
     }
 
 private:

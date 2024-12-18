@@ -26,6 +26,7 @@ target_include_directories(ds PRIVATE
     ${SRC_DIR}/stack
     ${SRC_DIR}/queue
     ${SRC_DIR}/linked_list
+    ${SRC_DIR}/tree
 )
 
 include(CTest)
@@ -55,6 +56,7 @@ target_include_directories(ds_tests PRIVATE
     ${SRC_DIR}/stack
     ${SRC_DIR}/queue
     ${SRC_DIR}/linked_list
+    ${SRC_DIR}/tree
 )
 
 include(GoogleTest)
