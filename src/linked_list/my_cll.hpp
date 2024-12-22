@@ -1,22 +1,21 @@
 #pragma once
 
-#include <concepts>
 #include <cstddef>
 #include <iterator>
 #include <ostream>
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 template<typename T>
 class CLL {
 private:
     struct Node {
-        T data;
-        Node* next;
+        T data{};
+        Node* next{};
 
         template<typename U>
-        explicit Node(U&& val) noexcept(std::is_nothrow_constructible_v<T, U&&>) :
-            data(std::forward<U>(val)), next(nullptr) {}
+        explicit Node(U&& val) noexcept : data(std::forward<U>(val)), next{nullptr} {}
     };
 
 public:
@@ -29,11 +28,11 @@ public:
         using iterator_category = std::forward_iterator_tag;
         using difference_type = std::ptrdiff_t;
 
-        Iterator() = default;
+        explicit Iterator() = default;
 
-        template<bool WasConst>
-            requires(!WasConst && IsConst)
-        Iterator(const Iterator<WasConst>& other) noexcept : m_current(other.m_current), m_head(other.m_head) {}
+        explicit Iterator(std::conditional_t<IsConst, const Node*, Node*> head,
+                          std::conditional_t<IsConst, const Node*, Node*> current) noexcept :
+            m_current(current), m_head(head) {}
 
         reference operator*() const noexcept { return m_current->data; }
         pointer operator->() const noexcept { return &m_current->data; }
@@ -49,34 +48,34 @@ public:
         }
 
         Iterator operator++(int) noexcept {
-            Iterator tmp = *this;
+            Iterator temp = *this;
             ++(*this);
-            return tmp;
+            return temp;
         }
 
-        friend constexpr bool operator==(const Iterator& a, const Iterator& b) noexcept {
-            return a.m_current == b.m_current;
-        }
-
-        friend constexpr bool operator!=(const Iterator& a, const Iterator& b) noexcept { return !(a == b); }
+        bool operator==(const Iterator& rhs) const noexcept { return m_current == rhs.m_current; }
+        bool operator!=(const Iterator& rhs) const noexcept { return !(*this == rhs); }
 
     private:
-        explicit Iterator(Node* current, Node* head) noexcept : m_current(current), m_head(head) {}
-
-        Node* m_current{nullptr};
-        Node* m_head{nullptr};
-
-        template<typename>
-        friend class MyCll;
+        std::conditional_t<IsConst, const Node*, Node*> m_current{};
+        std::conditional_t<IsConst, const Node*, Node*> m_head{};
     };
 
+public:
     using iterator = Iterator<false>;
     using const_iterator = Iterator<true>;
 
-    iterator begin() noexcept { return iterator(m_head, m_head); }
-    iterator end() noexcept { return iterator(); }
-    const_iterator begin() const noexcept { return const_iterator(m_head, m_head); }
-    const_iterator end() const noexcept { return const_iterator(); }
+    auto begin(this auto& self) noexcept {
+        using IterType =
+            std::conditional_t<std::is_const_v<std::remove_reference_t<decltype(self)>>, const_iterator, iterator>;
+        return IterType(self.m_head, self.m_head);
+    }
+
+    auto end(this auto& self) noexcept {
+        using IterType =
+            std::conditional_t<std::is_const_v<std::remove_reference_t<decltype(self)>>, const_iterator, iterator>;
+        return IterType();
+    }
 
     CLL() = default;
 
@@ -86,9 +85,9 @@ public:
         }
     }
 
-    CLL(const CLL& other) { *this = other; }
+    explicit CLL(const CLL& other) { *this = other; }
 
-    CLL(CLL&& other) noexcept = default;
+    explicit CLL(CLL&& other) noexcept = default;
 
     CLL& operator=(const CLL& other) {
         if (this != &other) {
@@ -104,32 +103,18 @@ public:
 
     ~CLL() { clear(); }
 
-    T& front() {
-        if (empty()) {
+    auto& front(this auto& self) {
+        if (self.empty()) {
             throw std::out_of_range("List is empty");
         }
-        return m_head->data;
+        return self.m_head->data;
     }
 
-    [[nodiscard]] const T& front() const {
-        if (empty()) {
+    auto& back(this auto& self) {
+        if (self.empty()) {
             throw std::out_of_range("List is empty");
         }
-        return m_head->data;
-    }
-
-    T& back() {
-        if (empty()) {
-            throw std::out_of_range("List is empty");
-        }
-        return m_tail->data;
-    }
-
-    [[nodiscard]] const T& back() const {
-        if (empty()) {
-            throw std::out_of_range("List is empty");
-        }
-        return m_tail->data;
+        return self.m_tail->data;
     }
 
     template<std::constructible_from<T> U>
@@ -260,5 +245,5 @@ public:
 private:
     Node* m_head{nullptr};
     Node* m_tail{nullptr};
-    std::size_t m_size{0};
+    size_t m_size{0};
 };

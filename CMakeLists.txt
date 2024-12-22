@@ -29,6 +29,12 @@ target_include_directories(ds PRIVATE
     ${SRC_DIR}/tree
 )
 
+target_compile_options(ds PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Werror>
+    $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra -Werror>
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+)
+
 include(CTest)
 enable_testing()
 
