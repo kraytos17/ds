@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
+#include <iostream>
+#include <queue>
 #include <stdexcept>
 #include <utility>
 
@@ -22,6 +24,38 @@ public:
     constexpr BST() = default;
 
     constexpr BST(Node* root) : m_root{root} {}
+
+    constexpr BST(const BST& other) { m_root = copy(other.m_root); }
+
+    constexpr BST& operator=(const BST& other) {
+        if (this != &other) {
+            clear(m_root);
+            m_root = copy(other.m_root);
+        }
+        return *this;
+    }
+
+    constexpr BST(BST&& other) noexcept : m_root(other.m_root) { other.m_root = nullptr; }
+
+    constexpr BST& operator=(BST&& other) noexcept {
+        if (this != &other) {
+            clear(m_root);
+            m_root = other.m_root;
+            other.m_root = nullptr;
+        }
+        return *this;
+    }
+
+
+    ~BST() { clear(m_root); }
+
+    void clear(Node* node) {
+        if (node) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    }
 
     void insert(T value) {
         Node* newNode = new Node{value};
@@ -140,13 +174,8 @@ public:
         return curr->data;
     }
 
-    std::size_t height() const {
-        Node* curr{m_root};
-        if (!curr) {
-            return 0;
-        }
-        return 1 + std::max(height(curr->left), height(curr->right));
-    }
+    std::size_t height() const { return height(m_root); }
+    std::size_t count() const { return count(m_root); }
 
     bool isBalanced() const {
         Node* curr{m_root};
@@ -178,6 +207,59 @@ public:
         return succ->data;
     }
 
+    void inorderTraversal(Node* root) {
+        if (!root) {
+            return;
+        }
+
+        inorderTraversal(root->left);
+        std::cout << root->data << '\n';
+        inorderTraversal(root->right);
+    }
+
+    void preorderTraversal(Node* root) {
+        if (!root) {
+            return;
+        }
+
+        std::cout << root->data << '\n';
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+    }
+
+    void postorderTraversal(Node* root) {
+        if (!root) {
+            return;
+        }
+
+        postorderTraversal(root->left);
+        postorderTraversal(root->right);
+        std::cout << root->data << '\n';
+    }
+
+    void levelorderTraversal() const {
+        if (!m_root) {
+            return;
+        }
+
+        std::queue<Node*> q;
+        while (!q.empty()) {
+            Node* curr = q.front();
+            q.pop();
+            std::cout << curr->data << '\n';
+
+            if (curr->left) {
+                q.push(curr->left);
+            }
+
+            if (curr->right) {
+                q.push(curr->right);
+            }
+        }
+
+        std::cout << '\n';
+    }
+
 private:
     Node* m_root{nullptr};
 
@@ -191,5 +273,31 @@ private:
         }
 
         delete toDel;
+    }
+
+    Node* copy(Node* node) const {
+        if (!node) {
+            return nullptr;
+        }
+
+        Node* newNode = new Node(node->data);
+        newNode->left = copy(node->left);
+        newNode->right = copy(node->right);
+
+        return newNode;
+    }
+
+    std::size_t height(Node* root) const {
+        if (!root) {
+            return 0;
+        }
+        return 1 + std::max(height(root->left), height(root->right));
+    }
+
+    std::size_t count(Node* root) const {
+        if (!root) {
+            return 0;
+        }
+        return 1 + count(root->left) + count(root->right);
     }
 };

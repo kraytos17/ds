@@ -113,7 +113,6 @@ public:
             }
             curr->next.reset();
             m_tail = curr;
-            ;
         }
     }
 
@@ -158,7 +157,7 @@ public:
         m_head = std::move(prev);
     }
 
-    constexpr const T& getAt(std::size_t idx) const {
+    [[nodiscard]] constexpr const T& getAt(std::size_t idx) const {
         if (idx >= count()) {
             throw std::out_of_range("Index is out of range");
         }
@@ -172,28 +171,28 @@ public:
         m_tail = nullptr;
     }
 
-    constexpr void print() const noexcept {
-        for (const auto& item: *this) {
+    template<typename Self>
+    constexpr void print(this Self&& self) noexcept {
+        for (const auto& item: self) {
             std::cout << item << " ";
         }
     }
 
     [[nodiscard]] constexpr bool isEmpty() const noexcept { return !m_head; }
 
+    template<bool IsConst>
     class Iterator {
     public:
-        using iterator_concept = std::forward_iterator_tag;
+        using iterator_concept = std::bidirectional_iterator_tag;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
-        using pointer = T*;
-        using reference = T&;
+        using pointer = std::conditional_t<IsConst, const T*, T*>;
+        using reference = std::conditional_t<IsConst, const T&, T&>;
 
         constexpr Iterator() noexcept = default;
-
         explicit constexpr Iterator(Node* node) noexcept : m_current(node) {}
 
         constexpr reference operator*() const { return m_current->data; }
-
         constexpr pointer operator->() const { return &m_current->data; }
 
         constexpr Iterator& operator++() noexcept {
@@ -207,22 +206,21 @@ public:
             return tmp;
         }
 
-        friend constexpr bool operator==(const Iterator& a, const Iterator& b) noexcept {
-            return a.m_current == b.m_current;
-        }
-
-        friend constexpr bool operator!=(const Iterator& a, const Iterator& b) noexcept {
-            return a.m_current != b.m_current;
-        }
+        constexpr bool operator==(const Iterator& b) noexcept { return m_current == b.m_current; }
 
     private:
         Node* m_current{nullptr};
     };
 
-    [[nodiscard]] constexpr Iterator begin() noexcept { return Iterator(m_head.get()); }
-    [[nodiscard]] constexpr Iterator end() noexcept { return Iterator(nullptr); }
-    [[nodiscard]] constexpr const Iterator begin() const noexcept { return Iterator(m_head.get()); }
-    [[nodiscard]] constexpr const Iterator end() const noexcept { return Iterator(nullptr); }
+    template<typename Self>
+    [[nodiscard]] constexpr auto begin(this Self&& self) noexcept {
+        return Iterator(self.m_head.get());
+    }
+
+    template<typename Self>
+    [[nodiscard]] constexpr auto end(this Self&&) noexcept {
+        return Iterator(nullptr);
+    }
 
 private:
     std::unique_ptr<Node> m_head;
@@ -231,14 +229,6 @@ private:
     Node* getNodeAt(std::size_t idx) const {
         Node* curr = m_head.get();
         for (std::size_t i{0}; i < idx; ++i) {
-            curr = curr->next.get();
-        }
-        return curr;
-    }
-
-    Node* getTailNode() const {
-        Node* curr = m_head.get();
-        while (curr && curr->next) {
             curr = curr->next.get();
         }
         return curr;
